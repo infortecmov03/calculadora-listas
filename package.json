@@ -1,0 +1,30 @@
+{
+  "name": "calculadora-listas",
+  "version": "1.0.0",
+  "description": "Calculadora de Listas Pessoais - Fernando J. Antonio",
+  "main": "index.js",
+  "scripts": {
+    "build": "mkdir -p www && cp \"Calculadora personalizada.html\" www/index.html",
+    "cap:init": "npx cap init calculadoraListas com.infortecmov.calculadora 1.0.0",
+    "cap:add:android": "npx cap add android",
+    "cap:sync": "npx cap sync",
+    "cap:build": "npm run build && npx cap sync",
+    "cap:open:android": "npx cap open android",
+    "cap:build:apk": "npm run build && npx cap sync && cd android && ./gradlew assembleDebug"
+  },
+  "keywords": ["calculadora", "listas", "android", "capacitor"],
+  "author": "Fernando J. Antonio",
+  "license": "MIT",
+  "devDependencies": {
+    "@capacitor/cli": "^5.5.0",
+    "@capacitor/android": "^5.5.0"
+  },
+  "dependencies": {
+    "@capacitor/core": "^5.5.0"
+  },
+  "capacitor": {
+    "appName": "Calculadora de Listas",
+    "appId": "com.infortecmov.calculadora",
+    "webDir": "www"
+  }
+}

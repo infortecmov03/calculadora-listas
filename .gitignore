@@ -1,0 +1,10 @@
+node_modules/
+android/
+ios/
+www/
+.DS_Store
+*.log
+.cache/
+.angular/
+.vscode/
+capacitor.config.ts
