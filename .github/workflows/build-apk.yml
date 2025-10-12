@@ -18,7 +18,8 @@ jobs:
       uses: actions/setup-node@v4
       with:
         node-version: '18'
-        cache: 'npm'
+        # REMOVE a linha do cache para evitar o erro
+        # cache: 'npm'
         
     - name: Setup Java
       uses: actions/setup-java@v4
@@ -28,11 +29,9 @@ jobs:
         
     - name: Install dependencies
       run: |
-        # Gera package-lock.json se não existir
-        if [ ! -f package-lock.json ]; then
-          npm install --package-lock-only
-        fi
-        npm install
+        # Instala sem verificar package-lock.json
+        npm install --no-package-lock
+        npm install -g @capacitor/cli
         
     - name: Build web assets
       run: npm run build
