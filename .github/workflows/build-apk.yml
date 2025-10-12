@@ -28,8 +28,11 @@ jobs:
         
     - name: Install dependencies
       run: |
+        # Gera package-lock.json se não existir
+        if [ ! -f package-lock.json ]; then
+          npm install --package-lock-only
+        fi
         npm install
-        npm install -g @capacitor/cli
         
     - name: Build web assets
       run: npm run build
