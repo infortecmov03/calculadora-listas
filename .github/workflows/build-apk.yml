@@ -1,0 +1,46 @@
+name: Build APK
+
+on:
+  push:
+    tags:
+      - 'v*'
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v4
+      
+    - name: Setup Node.js
+      uses: actions/setup-node@v4
+      with:
+        node-version: '18'
+        
+    - name: Install dependencies
+      run: |
+        npm install
+        npm install -g @capacitor/cli
+        npx cap init "Calculadora de Listas" "com.calculadora.listas" --web-dir .
+        npx cap add android
+        npx cap sync
+        
+    - name: Setup Java
+      uses: actions/setup-java@v3
+      with:
+        distribution: 'temurin'
+        java-version: '17'
+        
+    - name: Build APK
+      run: |
+        cd android
+        ./gradlew assembleDebug
+        cd ..
+        
+    - name: Upload APK
+      uses: actions/upload-artifact@v4
+      with:
+        name: calculadora-listas-apk
+        path: android/app/build/outputs/apk/debug/app-debug.apk
+        retention-days: 30

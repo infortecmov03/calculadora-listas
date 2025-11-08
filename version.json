@@ -1,0 +1,13 @@
+{
+  "latest_version": "2.0.0",
+  "version_code": 1,
+  "release_date": "2025-11-09",
+  "download_url": "https://github.com/infortecmov03/calculadora-listas/releases/latest/download/app-debug.apk",
+  "release_notes": [
+    "Sistema de atualizações automáticas",
+    "Download direto do APK",
+    "Interface melhorada",
+    "Performance otimizada"
+  ],
+  "min_required_version": "2.0.0"
+}
