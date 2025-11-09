@@ -1,0 +1,312 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+    <meta name="theme-color" content="#3498db">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta name="description" content="Calculadora de Listas - Organize e calcule suas listas com facilidade">
+    <title>Calculadora de Listas</title>
+    
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="all.min.css">
+    
+    <link rel="manifest" href="/manifest.json">
+    <link rel="icon" type="image/png" sizes="192x192" href="/icon-192.png">
+    <link rel="icon" type="image/png" sizes="512x512" href="/icon-512.png">
+    <link rel="apple-touch-icon" href="/icon-192.png">
+    
+    <script src="/lib/jspdf.umd.min.js"></script>
+    <script src="/lib/jspdf.plugin.autotable.min.js"></script>
+    <script src="/lib/chart.min.js"></script>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <button class="menu-toggle" id="menuToggle">
+        <i class="fas fa-bars"></i>
+    </button>
+    
+    <div class="container">
+        <div class="sidebar" id="sidebar">
+            <h2>
+                Minhas Listas
+                <i class="fas fa-clipboard-list"></i>
+            </h2>
+            
+            <ul class="lists-menu" id="listsMenu">
+            </ul>
+            
+            <div class="add-list-form">
+                <input type="text" id="newListName" placeholder="Nova lista">
+                <button id="addListBtn">
+                    <i class="fas fa-plus"></i>
+                </button>
+            </div>
+
+            <!-- Templates de Lista -->
+            <div class="templates-section">
+                <h3>Templates</h3>
+                <div class="templates-grid">
+                    <div class="template-card" data-template="supermercado">
+                        <i class="fas fa-shopping-cart"></i> Supermercado
+                    </div>
+                    <div class="template-card" data-template="viagem">
+                        <i class="fas fa-plane"></i> Viagem
+                    </div>
+                    <div class="template-card" data-template="evento">
+                        <i class="fas fa-glass-cheers"></i> Evento
+                    </div>
+                    <div class="template-card" data-template="construcao">
+                        <i class="fas fa-hammer"></i> Construção
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <div class="main-content">
+            <!-- Dashboard -->
+            <section class="dashboard hidden">
+                <div class="professional-header">
+                    <h1><i class="fas fa-chart-bar"></i> Dashboard</h1>
+                    <p>Visão geral das suas listas e estatísticas</p>
+                </div>
+                
+                <div class="stats-cards">
+                    <div class="stat-card">
+                        <div class="stat-value" id="totalLists">0</div>
+                        <div class="stat-label">
+                            <i class="fas fa-list"></i> Listas
+                        </div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-value" id="totalItems">0</div>
+                        <div class="stat-label">
+                            <i class="fas fa-cube"></i> Itens
+                        </div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-value" id="totalValueAll">MZN 0,00</div>
+                        <div class="stat-label">
+                            <i class="fas fa-money-bill-wave"></i> Valor Total
+                        </div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-value" id="avgValue">MZN 0,00</div>
+                        <div class="stat-label">
+                            <i class="fas fa-chart-line"></i> Média por Item
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Sistema de Orçamento -->
+                <div class="budget-section">
+                    <h3><i class="fas fa-wallet"></i> Controle de Orçamento</h3>
+                    <div class="budget-input">
+                        <input type="number" id="listBudget" placeholder="Definir orçamento (MZN)" step="0.01" inputmode="decimal" pattern="[0-9]*">
+                        <button id="setBudgetBtn">
+                            <i class="fas fa-check"></i> Definir
+                        </button>
+                    </div>
+                    <div class="budget-progress">
+                        <div class="budget-progress-bar" id="budgetProgressBar"></div>
+                    </div>
+                    <div class="budget-info">
+                        <span id="budgetUsed">MZN 0,00</span>
+                        <span id="budgetRemaining">MZN 0,00</span>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Gráficos -->
+            <section class="charts-section hidden">
+                <div class="chart-container">
+                    <canvas id="categoryChart"></canvas>
+                </div>
+                <div class="chart-container">
+                    <canvas id="valueDistributionChart"></canvas>
+                </div>
+            </section>
+
+            <!-- Conteúdo Principal -->
+            <div class="header">
+                <h1><i class="fas fa-calculator"></i> Calculadora de Listas</h1>
+                <div class="current-list" id="currentList">
+                    <i class="fas fa-clipboard-check"></i> Lista Principal
+                </div>
+                <!-- Botão para mostrar/ocultar dashboard -->
+                <button id="toggleDashboardBtn" class="btn-info">
+                    <i class="fas fa-chart-bar"></i> Mostrar Dashboard
+                </button>
+            </div>
+
+            <!-- Busca e Filtros -->
+            <div class="search-section">
+                <div class="search-input">
+                    <i class="fas fa-search"></i>
+                    <input type="text" id="searchInput" placeholder="Buscar itens...">
+                </div>
+                <select id="categoryFilter">
+                    <option value="">Todas as categorias</option>
+                </select>
+                
+                <!-- Botões de ordenação -->
+                <div class="sort-buttons">
+                    <button id="sortByNameBtn" class="btn-info">
+                        <i class="fas fa-sort-alpha-down"></i> Ordem Alfabética
+                    </button>
+                    <button id="sortByValueBtn" class="btn-info">
+                        <i class="fas fa-sort-amount-down"></i> Maior Valor
+                    </button>
+                </div>      
+            </div>
+            
+            <div class="input-section">
+                <input type="text" id="itemName" placeholder="Nome do item">
+                
+                <!-- Campo de Valor Otimizado -->
+                <div class="value-input-container">
+                    <input type="text" 
+                           id="itemValue" 
+                           placeholder="Valor (MZN)" 
+                           inputmode="decimal"
+                           pattern="[0-9,.]*"
+                           class="value-input">
+                    <span class="currency-symbol"></span>
+                </div>
+                
+                <select id="itemCategory">
+                    <option value="">Sem categoria</option>
+                </select>
+                <button id="addBtn">
+                    <i class="fas fa-plus-circle"></i> Adicionar Item
+                </button>
+            </div>
+            
+            <table id="itemsTable">
+                <thead>
+                    <tr>
+                        <th>Posição</th>
+                        <th>Nome</th>
+                        <th>Categoria</th>
+                        <th>Valor</th>
+                        <th>Ações</th>
+                    </tr>
+                </thead>
+                <tbody id="itemsList">
+                </tbody>
+            </table>
+            
+            <div class="total-section">
+                <span><i class="fas fa-calculator"></i> Total:</span>
+                <span id="totalValue">MZN 0,00</span>
+            </div>
+            
+            <div class="actions">
+                <button id="saveListBtn" class="btn-success">
+                    <i class="fas fa-save"></i> Salvar Lista
+                </button>
+                <button id="clearListBtn" class="btn-danger">
+                    <i class="fas fa-trash"></i> Limpar Lista
+                </button>
+                <button onclick="manageCategories()" class="btn-info">
+                    <i class="fas fa-palette"></i> Categorias
+                </button>
+                <button id="exportPdfBtn" class="btn-success">
+                    <i class="fas fa-file-pdf"></i> Exportar PDF
+                </button>
+                <button id="exportExcelBtn" class="btn-success">
+                    <i class="fas fa-file-excel"></i> Exportar Excel
+                </button>
+                <button id="backupBtn" class="btn-warning">
+                    <i class="fas fa-database"></i> Backup
+                </button>
+                <button id="importBtn" class="btn-success">
+                    <i class="fas fa-file-import"></i> Importar
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal de Confirmação -->
+    <div class="modal" id="confirmModal">
+        <div class="modal-content">
+            <h3 id="modalTitle">
+                <i class="fas fa-exclamation-triangle"></i> Confirmar Exclusão
+            </h3>
+            <p id="modalMessage">Tem certeza que deseja excluir este item?</p>
+            <div class="modal-actions">
+                <button id="modalCancel" class="btn-warning">
+                    <i class="fas fa-times"></i> Cancelar
+                </button>
+                <button id="modalConfirm" class="btn-danger">
+                    <i class="fas fa-trash"></i> Excluir
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal de Backup -->
+    <div class="modal" id="backupModal">
+        <div class="modal-content">
+            <h3><i class="fas fa-database"></i> Backup dos Dados</h3>
+            <p>Faça backup de todas as suas listas ou importe dados de backup.</p>
+            <div class="modal-actions">
+                <button id="exportBackupBtn" class="btn-success">
+                    <i class="fas fa-download"></i> Exportar Backup
+                </button>
+                <button id="importBackupBtn" class="btn-warning">
+                    <i class="fas fa-upload"></i> Importar Backup
+                </button>
+                <button id="backupCancel" class="btn-danger">
+                    <i class="fas fa-times"></i> Cancelar
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Input de Importação -->
+    <input type="file" id="importFile" accept=".json" style="display: none;">
+
+    <!-- Botão Sair -->
+    <div class="back-button-overlay" id="backButtonOverlay">
+        <div class="back-button-modal">
+            <h3><i class="fas fa-sign-out-alt"></i> Sair do Aplicativo?</h3>
+            <p>Deseja realmente sair da Calculadora de Listas?</p>
+            <div class="back-button-actions">
+                <button id="backButtonCancel" class="btn-warning">
+                    <i class="fas fa-times"></i> Cancelar
+                </button>
+                <button id="backButtonConfirm" class="btn-danger">
+                    <i class="fas fa-sign-out-alt"></i> Sair
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Sistema de Notificações -->
+    <div class="notifications-container" id="notifications"></div>
+
+    <!-- Toast -->
+    <div class="toast" id="toast"></div>
+
+    <footer class="copyright">
+        <p>
+            <i class="fas fa-copyright"></i> 2025 
+            <a href="https://github.com/infortecmov03/calculadora-listas/releases" target="_blank">
+                <i class="fas fa-download"></i> Clique aqui pra baixar o app
+            </a>. Todos os direitos reservados.
+        </p>
+        <p>
+            <i class="fas fa-code"></i> Desenvolvido por 
+            <a href="https://infortecmov.netlify.app">Fernando J. Antonio</a>
+        </p>
+        <p>
+            <i class="fas fa-globe"></i> use o app online 
+            <a href="https://calculadoraxikotela.netlify.app">clicando aqui</a>
+        </p>
+    </footer>
+
+    <script src="script.js"></script>
+</body>
+</html>
