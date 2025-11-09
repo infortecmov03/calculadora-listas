@@ -18,15 +18,34 @@ jobs:
       uses: actions/setup-node@v4
       with:
         node-version: '18'
-        cache: 'npm'
         
-    - name:  Install dependencies
-      run: npm install
+    - name:  Create package files if missing
+      run: |
+        if [ ! -f package.json ]; then
+          echo '{
+            \"name\": \"calculadora-listas\",
+            \"version\": \"2.0.0\",
+            \"description\": \"Calculadora de Listas PWA\",
+            \"main\": \"script.js\",
+            \"scripts\": {
+              \"serve\": \"python server.py\"
+            },
+            \"dependencies\": {
+              \"@capacitor/android\": \"^5.0.0\",
+              \"@capacitor/core\": \"^5.0.0\",
+              \"@capacitor/cli\": \"^5.0.0\"
+            }
+          }' > package.json
+        fi
         
-    - name:  Install Capacitor CLI
+        if [ ! -f package-lock.json ]; then
+          npm install
+        fi
+        
+    - name: 🔧 Install Capacitor CLI
       run: npm install -g @capacitor/cli
         
-    - name:  Create project structure
+    - name: 📁 Create project structure
       run: |
         mkdir -p public
         cp *.html public/ 2>/dev/null || true
@@ -46,13 +65,13 @@ jobs:
         distribution: 'temurin'
         java-version: '17'
         
-    - name: 🏗️ Build APK
+    - name:  Build APK
       run: |
         cd android
         chmod +x gradlew
         ./gradlew assembleDebug
         
-    - name: 📤 Upload APK
+    - name:  Upload APK
       uses: actions/upload-artifact@v4
       with:
         name: calculadora-listas-apk
