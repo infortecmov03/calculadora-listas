@@ -1,77 +1,56 @@
-﻿name:  Build APK
+﻿name: Build APK
 
 on:
   push:
     tags:
       - 'v*'
-  workflow_dispatch:
 
 jobs:
   build:
     runs-on: ubuntu-latest
     
     steps:
-    - name:  Checkout code
+    - name: Checkout code
       uses: actions/checkout@v4
       
-    - name:  Setup Node.js
+    - name: Setup Node.js
       uses: actions/setup-node@v4
       with:
         node-version: '18'
         
-    - name:  Create package files if missing
+    - name: Install dependencies
       run: |
-        if [ ! -f package.json ]; then
-          echo '{
-            \"name\": \"calculadora-listas\",
-            \"version\": \"2.0.0\",
-            \"description\": \"Calculadora de Listas PWA\",
-            \"main\": \"script.js\",
-            \"scripts\": {
-              \"serve\": \"python server.py\"
-            },
-            \"dependencies\": {
-              \"@capacitor/android\": \"^5.0.0\",
-              \"@capacitor/core\": \"^5.0.0\",
-              \"@capacitor/cli\": \"^5.0.0\"
-            }
-          }' > package.json
-        fi
+        npm install
+        npm install -g @capacitor/cli
         
-        if [ ! -f package-lock.json ]; then
-          npm install
-        fi
-        
-    - name: 🔧 Install Capacitor CLI
-      run: npm install -g @capacitor/cli
-        
-    - name: 📁 Create project structure
+    - name: Create project structure
       run: |
         mkdir -p public
-        cp *.html public/ 2>/dev/null || true
-        cp *.css public/ 2>/dev/null || true  
-        cp *.js public/ 2>/dev/null || true
-        cp *.json public/ 2>/dev/null || true
-        cp -r lib public/ 2>/dev/null || true
+        cp *.html public/ || true
+        cp *.css public/ || true
+        cp *.js public/ || true
+        cp *.json public/ || true
+        cp -r lib public/ || true
         
-    - name: 🛠️ Initialize Android
+    - name: Initialize Capacitor
       run: |
+        npx cap init "Calculadora de Listas" "com.calculadora.listas" --web-dir public
         npx cap add android
         npx cap sync
         
-    - name: ☕ Setup Java
+    - name: Setup Java
       uses: actions/setup-java@v3
       with:
         distribution: 'temurin'
         java-version: '17'
         
-    - name:  Build APK
+    - name: Build APK
       run: |
         cd android
         chmod +x gradlew
         ./gradlew assembleDebug
         
-    - name:  Upload APK
+    - name: Upload APK
       uses: actions/upload-artifact@v4
       with:
         name: calculadora-listas-apk

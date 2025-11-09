@@ -1,18 +1,27 @@
-{
+﻿{
   "name": "calculadora-listas",
-  "version": "1.0.0",
-  "dependencies": {
-    "@capacitor/android": "^5.0.0",
-    "@capacitor/core": "^5.0.0",
-    "@capacitor/cli": "^5.0.0",
-    "@capacitor/filesystem": "^5.0.0",
-    "@capacitor/share": "^5.0.0",
-    "@capacitor/preferences": "^5.0.0"
-  },
+  "version": "2.0.0",
+  "description": "Calculadora de Listas PWA - Aplicativo offline para Android",
+  "main": "script.js",
   "scripts": {
-    "build": "echo 'Build completed'",
+    "serve": "python server.py",
     "cap:init": "npx cap init",
     "cap:add:android": "npx cap add android",
     "cap:sync": "npx cap sync"
-  }
+  },
+  "dependencies": {
+    "@capacitor/android": "^5.0.0",
+    "@capacitor/core": "^5.0.0",
+    "@capacitor/cli": "^5.0.0"
+  },
+  "keywords": [
+    "pwa",
+    "calculadora",
+    "listas",
+    "offline",
+    "android",
+    "capacitor"
+  ],
+  "author": "infortecmov03",
+  "license": "MIT"
 }
