@@ -35,7 +35,7 @@ jobs:
         cp *.json public/ 2>/dev/null || true
         cp -r lib public/ 2>/dev/null || true
         
-    - name:  Initialize Android
+    - name: 🛠️ Initialize Android
       run: |
         npx cap add android
         npx cap sync
