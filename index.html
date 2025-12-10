@@ -17,9 +17,6 @@
     <link rel="icon" type="image/png" sizes="512x512" href="/icon-512.png">
     <link rel="apple-touch-icon" href="/icon-192.png">
     
-    <script src="/lib/jspdf.umd.min.js"></script>
-    <script src="/lib/jspdf.plugin.autotable.min.js"></script>
-    <script src="/lib/chart.min.js"></script>
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
@@ -219,10 +216,7 @@
                     <i class="fas fa-file-excel"></i> Exportar Excel
                 </button>
                 <button id="backupBtn" class="btn-warning">
-                    <i class="fas fa-database"></i> Backup
-                </button>
-                <button id="importBtn" class="btn-success">
-                    <i class="fas fa-file-import"></i> Importar
+                    <i class="fas fa-database"></i> Backup/Restaurar
                 </button>
             </div>
         </div>
@@ -249,8 +243,8 @@
     <!-- Modal de Backup -->
     <div class="modal" id="backupModal">
         <div class="modal-content">
-            <h3><i class="fas fa-database"></i> Backup dos Dados</h3>
-            <p>Faça backup de todas as suas listas ou importe dados de backup.</p>
+            <h3><i class="fas fa-database"></i> Backup e Restauração</h3>
+            <p>Exporte um backup das suas listas ou importe dados de um arquivo.</p>
             <div class="modal-actions">
                 <button id="exportBackupBtn" class="btn-success">
                     <i class="fas fa-download"></i> Exportar Backup
@@ -291,19 +285,10 @@
     <div class="toast" id="toast"></div>
 
     <footer class="copyright">
+        <p>&copy; 2025 <a href="https://infortecmov.netlify.app" target="_blank">Fernando J. Antonio</a>. Todos os direitos reservados.</p>
         <p>
-            <i class="fas fa-copyright"></i> 2025 
-            <a href="https://github.com/infortecmov03/calculadora-listas/releases" target="_blank">
-                <i class="fas fa-download"></i> Clique aqui pra baixar o app
-            </a>. Todos os direitos reservados.
-        </p>
-        <p>
-            <i class="fas fa-code"></i> Desenvolvido por 
-            <a href="https://infortecmov.netlify.app">Fernando J. Antonio</a>
-        </p>
-        <p>
-            <i class="fas fa-globe"></i> use o app online 
-            <a href="https://calculadoraxikotela.netlify.app">clicando aqui</a>
+            <a href="https://github.com/infortecmov03/calculadora-listas/releases" target="_blank">Download do Aplicativo</a> | 
+            <a href="https://calculadoraxikotela.netlify.app" target="_blank">Acessar Versão Online</a>
         </p>
     </footer>
 

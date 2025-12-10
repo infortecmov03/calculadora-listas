@@ -10,15 +10,17 @@
       "launchShowDuration": 3000,
       "launchAutoHide": true,
       "backgroundColor": "#2c3e50"
-    },
-    "Permissions": {
-      "WRITE_EXTERNAL_STORAGE": {
-        "name": "WRITE_EXTERNAL_STORAGE"
-      }
     }
   },
   "android": {
     "allowMixedContent": true,
-    "webContentsDebuggingEnabled": true
+    "webContentsDebuggingEnabled": true,
+    "permissions": [
+      "android.permission.POST_NOTIFICATIONS",
+      "android.permission.READ_EXTERNAL_STORAGE",
+      "android.permission.WRITE_EXTERNAL_STORAGE",
+      "android.permission.ACCESS_NETWORK_STATE",
+      "android.permission.VIBRATE"
+    ]
   }
 }

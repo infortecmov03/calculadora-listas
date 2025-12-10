@@ -1,9 +1,11 @@
-﻿{
+{
   "name": "calculadora-listas",
   "version": "2.0.0",
   "description": "Calculadora de Listas PWA - Aplicativo offline para Android",
-  "main": "script.js",
+  "main": "main.js",
   "scripts": {
+    "start": "electron .",
+    "dist": "electron-builder",
     "serve": "python server.py",
     "cap:init": "npx cap init",
     "cap:add:android": "npx cap add android",
@@ -14,6 +16,10 @@
     "@capacitor/core": "^5.0.0",
     "@capacitor/cli": "^5.0.0"
   },
+  "devDependencies": {
+    "electron": "^29.1.5",
+    "electron-builder": "^24.13.3"
+  },
   "keywords": [
     "pwa",
     "calculadora",
@@ -23,5 +29,25 @@
     "capacitor"
   ],
   "author": "infortecmov03",
-  "license": "MIT"
+  "license": "MIT",
+  "build": {
+    "appId": "com.example.calculadoralistas",
+    "productName": "Calculadora de Listas",
+    "files": [
+      "index.html",
+      "script.js",
+      "style.css",
+      "main.js",
+      "manifest.json",
+      "sw.js",
+      "all.min.css",
+      "download-handler.js",
+      "update-checker.js",
+      "version.json",
+      "webfonts"
+    ],
+    "directories": {
+      "output": "dist"
+    }
+  }
 }
